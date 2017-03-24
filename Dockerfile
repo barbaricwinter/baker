@@ -12,9 +12,12 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with baker.  If not, see <http://www.gnu.org/licenses/>.
-FROM alpine:3.4
+FROM fedora:25
 MAINTAINER Emory Merryman emory.merryman@deciphernow.com
 COPY run.sh entrypoint.sh code.sh post-commit.sh config root /opt/docker/
-RUN ["/bin/sh", "/opt/docker/run.sh"]
-ENTRYPOINT ["/bin/sh", "/opt/docker/entrypoint.sh"]
+RUN ["/usr/bin/sh", "/opt/docker/run.sh"]
+ENTRYPOINT ["/usr/bin/sh", "/opt/docker/entrypoint.sh"]
 CMD []
+VOLUME /home/user
+VOLUME /code
+VOLUME /docker-compose

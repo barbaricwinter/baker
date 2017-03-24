@@ -14,18 +14,24 @@
 #    You should have received a copy of the GNU General Public License
 #    along with baker.  If not, see <http://www.gnu.org/licenses/>.
 
-apk update &&
-    apk upgrade &&
-    apk add --no-cache openssh &&
-    apk add --no-cache curl &&
-    apk add --no-cache git &&
-    apk add --no-cache docker &&
-    apk add --no-cache nodejs &&
-    apk add --no-cache python &&
-    apk add --no-cache gcc &&
-    apk add --no-cache g++ &&
-    apk add --no-cache make &&
-    apk add --no-cache bash &&
-    npm install -g npm &&
-    adduser -D user &&
-    rm -fr /var/cache/apk/*
+dnf update --assumeyes &&
+    dnf install --assumeyes openssh-clients &&
+    dnf install --assumeyes git-core &&
+    dnf install --assumeyes wget &&
+    dnf install --assumeyes tar &&
+    dnf install --assumeyes xz &&
+    wget https://nodejs.org/dist/v6.10.1/node-v6.10.1-linux-x64.tar.xz &&
+    tar --extract --xz --file node-v6.10.1-linux-x64.tar.xz &&
+    mv node-v6.10.1-linux-x64 /opt &&
+    export PATH=${PATH}:/opt/node-v6.10.1-linux-x64/bin &&
+    dnf install --assumeyes openssh-clients &&
+    dnf install --assumeyes curl &&
+    dnf install --assumeyes git &&
+    dnf install --assumeyes nodejs &&
+    adduser --create-home user &&
+    mkdir /code &&
+    chown user:user /code &&
+    mkdir docker-compose &&
+    chown user:user /docker-compose &&
+    dnf update --assumeyes &&
+    dnf clean all
