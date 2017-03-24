@@ -14,11 +14,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with baker.  If not, see <http://www.gnu.org/licenses/>.
 
-git init &&
-    git config user.name "${GIT_USER_NAME}" &&
-    git config user.email "${GIT_USER_EMAIL}" &&
-    git remote add upstream ssh://upstream/cte/object-drive-ui.git &&
-    git config remote.upstream.pushurl "you really didn't want to do that" &&
-    git remote add origin ssh://origin/${GITLAB_USERID}/object-drive-ui.git &&
-    cp /opt/docker/post-commit.sh .git/hooks/post-commit &&
-    chmod 0500 .git/hooks/post-commit
+while ! git push origin $(git rev-parse --abbrev-ref HEAD)
+do
+    sleep 10s
+done

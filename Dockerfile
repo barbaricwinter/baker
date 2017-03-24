@@ -14,7 +14,7 @@
 #    along with baker.  If not, see <http://www.gnu.org/licenses/>.
 FROM alpine:3.4
 MAINTAINER Emory Merryman emory.merryman@deciphernow.com
-COPY run.sh entrypoint.sh /opt/docker/
+COPY run.sh entrypoint.sh post-commit.sh /opt/docker/
 RUN ["/bin/sh", "/opt/docker/run.sh"]
 ENTRYPOINT ["/bin/sh", "/opt/docker/entrypoint.sh"]
 CMD []
