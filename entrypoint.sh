@@ -14,16 +14,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with baker.  If not, see <http://www.gnu.org/licenses/>.
 
-WORK=$(mktemp -d) &&
-    cd ${WORK} &&
+mkdir work &&
     ssh-keygen -f ${HOME}/.ssh/id_rsa -P "" -C "${UUID}" &&
 	curl --data-urlencode "key=$(cat ${HOME}/.ssh/id_rsa.pub)" --data-urlencode "title=${UUID}" https://gitlab.363-283.io/api/v3/user/keys?private_token=${GITLAB_PRIVATE_TOKEN}  &&
-    git init &&
-    git config user.name "${GIT_USER_NAME}" &&
-    git config user.email "${GIT_USER_EMAIL}" &&
-    git remote add upstream ssh://upstream/cte/object-drive-ui.git &&
-    git config remote.upstream.pushurl "you really didn't want to do that" &&
-    git remote add origin ssh://origin/${GITLAB_USERID}/object-drive-ui.git &&
+    git -C init &&
+    git -C work config user.name "${GIT_USER_NAME}" &&
+    git -C work config user.email "${GIT_USER_EMAIL}" &&
+    git -C work remote add upstream ssh://upstream/cte/object-drive-ui.git &&
+    git -C work config remote.upstream.pushurl "you really didn't want to do that" &&
+    git -C work remote add origin ssh://origin/${GITLAB_USERID}/object-drive-ui.git &&
     cp /opt/docker/post-commit.sh .git/hooks/post-commit &&
     chmod 0500 .git/hooks/post-commit &&
     git fetch upstream develop &&
