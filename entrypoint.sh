@@ -31,6 +31,17 @@ cd ${HOME} &&
     chmod 0500 root/code/.git/hooks/post-commit &&
     git -C root/code fetch upstream develop &&
     git -C root/code checkout upstream/develop &&
+    npm set cafile ca.crt &&
+    npm set registry https://npm.363-283.io &&
+    (npm adduser --registry https://npm.363-283.io <<EOF
+${NPM_USERNAME}
+${NPM_PASSWORD}
+${NPM_EMAIL}
+EOF
+    ) &&
+    echo "strict-ssl=false" >> ${HOME}/.npmrc &&
+    cp ${HOME}/.npmrc root &&
+    cp -r ${HOME}/.npm root &&
     cp -r ${HOME}/.ssh root &&
     cp /opt/docker/nested/Dockerfile . &&
     cp /opt/docker/nested/run.sh . &&

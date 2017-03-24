@@ -20,4 +20,6 @@ apk update &&
     apk add --no-cache curl &&
     apk add --no-cache git &&
     apk add --no-cache docker &&
+    apk add --no-cache nodejs &&
+    npm install -g npm &&
     rm -fr /var/cache/apk/*
