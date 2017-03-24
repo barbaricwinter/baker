@@ -14,12 +14,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with baker.  If not, see <http://www.gnu.org/licenses/>.
 
-su user -c "/bin/sh /opt/docker/code.sh" &&
-    mkdir root &&
-    cp  /home/user/.npmrc root &&
-    cp -r /home/user/.npm root &&
-    cp -r /home/user/.ssh root &&
-    cp /opt/docker/nested/Dockerfile . &&
-    cp /opt/docker/nested/run.sh . &&
-    cp /opt/docker/nested/entrypoint.sh . &&
-    docker build --tag ${IMAGE_TAG} .
+cd $(mktemp -d) &&
+    su user -c "/bin/sh /opt/docker/code.sh" &&
+    bash

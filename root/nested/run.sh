@@ -21,6 +21,7 @@ apk update &&
     apk add --no-cache nodejs &&
     apk add --no-cache python &&
     apk add --no-cache g++ &&
+    apk add --no-cache c++ &&
     apk add --no-cache make &&
     npm install -g npm &&
     adduser -D user &&

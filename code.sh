@@ -39,6 +39,7 @@ ${NPM_EMAIL}
 EOF
     ) &&
     echo "strict-ssl=false" >> ${HOME}/.npmrc &&
+    cd code &&
     npm install node-sass &&
 #    npm install
     true

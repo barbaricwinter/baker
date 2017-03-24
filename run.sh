@@ -21,7 +21,11 @@ apk update &&
     apk add --no-cache git &&
     apk add --no-cache docker &&
     apk add --no-cache nodejs &&
+    apk add --no-cache python &&
+    apk add --no-cache gcc &&
     apk add --no-cache g++ &&
     apk add --no-cache make &&
+    apk add --no-cache bash &&
     npm install -g npm &&
+    adduser -D user &&
     rm -fr /var/cache/apk/*
