@@ -1,0 +1,119 @@
+version: "2"
+volumes:
+  browser_home:
+    external:
+      name: "7f35d5a45e5a7a28e0a3ebd5ab0da654854b7487e6bf4348bfa858d821b9052a"
+  code:
+    external:
+      name: object-drive-ui
+  ssh:
+  npm:
+  jspm:
+services:
+  chromium:
+    image: "docker.io/sassmann/debian-chromium"
+    tty: true
+    environment:
+      - DISPLAY=:0
+    volumes:
+      - "browser_home:/home/user"
+      - "/tmp/.X11-unix:/tmp/.X11-unix:ro"
+      - "/run/user/1000/pulse/native:/tmp/pulse:ro"
+  aac:
+    image: "deciphernow/aac:${VERSION_TAG}"
+    command: "/root/entry"
+    hostname: "twl-server-generic2"
+    tty: true
+    stdin_open: true
+    links:
+      - "dias"
+      - "zk"
+  builder:
+    build: "images/builder2"
+    environment:
+      - NPM_USERNAME=${NPM_USERNAME}
+      - NPM_PASSWORD=${NPM_PASSWORD}
+      - NPM_EMAIL=${NPM_EMAIL}
+      - GITLAB_PRIVATE_TOKEN=${GITLAB_PRIVATE_TOKEN}
+      - GIT_USER_NAME=${GIT_USER_NAME}
+      - GIT_USER_EMAIL=${GIT_USER_EMAIL}
+      - GITLAB_USERID=${GITLAB_USERID}
+    stdin_open: true
+    tty: true
+#    tmpfs: "/usr/local/src:uid=1000,gid=1000"
+    volumes:
+      - "code:/root/code"
+      - "ssh:/root/.ssh"
+      - "npm:/root/.npm"
+      - "jspm:/root/.jspm"
+    working_dir: /root/code
+    entrypoint: bash
+  gatekeeper:
+    image: "deciphernow/gatekeeper:${VERSION_TAG}"
+    command: "/root/entry"
+    tty: true
+    stdin_open: true
+    links:
+      - "aac"
+      - "zk"
+      - "odrive"
+      - "builder"
+    ports:
+      - "8080:443"
+  odrive:
+    image: "deciphernow/odrive:${VERSION_TAG}"
+    environment:
+      - OD_AAC_CA=/go/src/decipher.com/object-drive-server/defaultcerts/client-aac/trust/client.trust.pem
+      - OD_AAC_CERT=/go/src/decipher.com/object-drive-server/defaultcerts/client-aac/id/client.cert.pem
+      - OD_AAC_KEY=/go/src/decipher.com/object-drive-server/defaultcerts/client-aac/id/client.key.pem
+      - OD_AWS_ACCESS_KEY_ID
+      - OD_AWS_ENDPOINT
+      - OD_AWS_REGION
+      - OD_AWS_S3_BUCKET
+      - OD_AWS_SECRET_ACCESS_KEY
+      - OD_AWS_SECRET_KEY
+      - OD_CACHE_EVICTAGE
+      - OD_CACHE_HIGHWATERMARK
+      - OD_CACHE_LOWWATERMARK
+      - OD_CACHE_PARTITION
+      - OD_CACHE_ROOT
+      - OD_CACHE_WALKSLEEP
+      - OD_DB_CA
+      - OD_DB_CERT
+      - OD_DB_CONN_PARAMS=parseTime=true&collation=utf8_unicode_ci
+      - OD_DB_HOST
+      - OD_DB_KEY
+      - OD_DB_MAXIDLECONNS
+      - OD_DB_MAXOPENCONNS
+      - OD_DB_PASSWORD
+      - OD_DB_PORT
+      - OD_DB_SCHEMA
+      - OD_DB_USERNAME
+      - OD_ENCRYPT_MASTERKEY
+      - OD_SERVER_CA=/go/src/decipher.com/object-drive-server/defaultcerts/server/trust.pem
+      - OD_SERVER_CERT=/go/src/decipher.com/object-drive-server/defaultcerts/server/server.cert.pem
+      - OD_SERVER_KEY=/go/src/decipher.com/object-drive-server/defaultcerts/server/server.key.pem
+      - OD_SERVER_PORT
+      - OD_STANDALONE
+      - OD_ZK_BASEPATH
+      - OD_ZK_ROOT
+      - OD_ZK_TIMEOUT
+      - OD_ZK_URL
+    links:
+      - "metadatadb"
+      - "aac"
+      - "zk"
+  metadatadb:
+    image: "deciphernow/metadatadb:${VERSION_TAG}"
+    environment:
+      - MYSQL_CONTAINER_NAME=metadatadb
+      - MYSQL_USER=dbuser
+      - MYSQL_DATABASE=metadatadb
+      - MYSQL_ROOT_PASSWORD=dbRootPassword
+      - MYSQL_PASSWORD=dbPassword
+      - OD_ENCRYPT_MASTERKEY
+    command: "./docker-entrypoint.sh mysqld_safe"
+  zk:
+    image: "deciphernow/zk:${VERSION_TAG}"
+  dias:
+    image: "deciphernow/dias:${VERSION_TAG}"
