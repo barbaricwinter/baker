@@ -16,7 +16,7 @@ FROM fedora:25
 MAINTAINER Emory Merryman emory.merryman@deciphernow.com
 COPY run.sh entrypoint.sh code.sh post-commit.sh config root /opt/docker/
 RUN ["/usr/bin/sh", "/opt/docker/run.sh"]
-ENTRYPOINT ["/usr/bin/sh", "/opt/docker/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/sh", "/opt/docker/code.sh"]
 CMD []
 VOLUME /home/user
 VOLUME /code

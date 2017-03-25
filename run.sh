@@ -24,6 +24,7 @@ dnf update --assumeyes &&
     tar --extract --xz --file node-v6.10.1-linux-x64.tar.xz &&
     mv node-v6.10.1-linux-x64 /opt &&
     export PATH=${PATH}:/opt/node-v6.10.1-linux-x64/bin &&
+    dnf install --assumeyes bzip2 &&
     dnf install --assumeyes openssh-clients &&
     dnf install --assumeyes curl &&
     dnf install --assumeyes git &&

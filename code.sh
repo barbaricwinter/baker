@@ -31,13 +31,19 @@ cd /code &&
     git checkout upstream/develop &&
     npm set cafile ca.crt &&
     npm set registry https://npm.363-283.io &&
-    (npm adduser --registry https://npm.363-283.io <<EOF
+    echo "strict-ssl=false" >> ${HOME}/.npmrc &&
+(npm adduser --registry https://npm.363-283.io <<EOF
 ${NPM_USERNAME}
 ${NPM_PASSWORD}
 ${NPM_EMAIL}
 EOF
     ) &&
     echo "strict-ssl=false" >> ${HOME}/.npmrc &&
-    npm install node-sass &&
-#    npm install
-    true
+    npm install jspm &&
+    sed -i "s#\"strictSSL\": true#\"strictSSL\": false#" ~/.jspm/config 
+    export PATH=${PATH}:${PWD}/node_modules/.bin &&
+    jspm config registries.github.remote https://github.jspm.io &&
+    jspm config registries.github.auth ${GITHUB_REGISTRY_TOKEN} &&
+    jspm config registries.github.maxRepoSize 0 &&
+    jspm config registries.github.handler jspm-github &&
+    ( npm install || bash )
