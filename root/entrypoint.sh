@@ -14,15 +14,3 @@
 #    You should have received a copy of the GNU General Public License
 #    along with baker.  If not, see <http://www.gnu.org/licenses/>.
 
-HOME=$(docker volume create) &&
-    DOCKER_COMPOSE=$(docker volume create) &&
-    CODE=$(docker volume create) &&
-    docker \
-        run \
-        --interactive \
-        --tty \
-        --rm \
-        --volume ${HOME}:/home/user \
-        --volume ${DOCKER_COMPOSE}:/docker-compose \
-        --volume ${CODE}:/code \
-        barbaricwinter/object-drive-ui-baker:0.0.0
