@@ -1,3 +1,4 @@
+#!/bin/sh
 # This file is part of baker.
 #
 #    baker is free software: you can redistribute it and/or modify
@@ -12,9 +13,16 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with baker.  If not, see <http://www.gnu.org/licenses/>.
-FROM alpine:3.4
-MAINTAINER Emory Merryman emory.merryman@deciphernow.com
-COPY root /opt/docker/
-RUN ["/usr/bin/sh", "/opt/docker/run.sh"]
-ENTRYPOINT ["/usr/bin/sh", "/opt/docker/entrypoint.sh"]
-CMD []
+
+HOME=$(docker volume create) &&
+    DOCKER_COMPOSE=$(docker volume create) &&
+    CODE=$(docker volume create) &&
+    docker \
+        run \
+        --interactive \
+        --tty \
+        --rm \
+        --volume ${HOME}:/home/user \
+        --volume ${DOCKER_COMPOSE}:/docker-compose \
+        --volume ${CODE}:/code \
+        barbaricwinter/object-drive-ui-baker:0.0.0
