@@ -17,4 +17,10 @@
 apk update &&
     apk upgrade &&
     apk add --no-cache docker &&
+    apk add --no-cache bash &&
+    ls -1 /opt/docker/bin/ | while read BIN
+    do
+        cp /opt/docker/bin/${BIN} /usr/local/bin/${BIN%.*} &&
+        chmod 0500 /usr/local/bin/${BIN%.*}
+    done &&
     rm -fr /var/cache/apk/*
